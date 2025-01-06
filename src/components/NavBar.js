@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import Cart from "./Cart";
 
 function NavBar() {
+  const cart = useSelector((state) => state.carts.cart);
   return (
     <nav
       className="navbar navbar-expand-lg bg-body-tertiary"
@@ -21,14 +24,32 @@ function NavBar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={"/add/product"} style={{color:"black"}}>
+              <Link
+                className="nav-link"
+                to={"/add/product"}
+                style={{ color: "black" }}
+              >
                 Add
               </Link>
             </li>
-            
+
             <li className="nav-item">
-              <Link className="nav-link" to={"/home"} style={{color:"black"}}>
+              <Link
+                className="nav-link"
+                to={"/home"}
+                style={{ color: "black" }}
+              >
                 Order
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to={"/home"}
+                style={{ color: "black" }}
+              >
+                <Cart item={Object.keys(cart).length} />
               </Link>
             </li>
           </ul>
