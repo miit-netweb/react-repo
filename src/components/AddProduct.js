@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 function AddProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [image,setImage] = useState("");
   const [inputData, setinputData] = useState({
     id: generateRandomString(10),
     title: "",
@@ -30,11 +31,20 @@ function AddProduct() {
   }
 
   const handleInputChange = (e, key) => {
-    const { value } = e.target;
-    setinputData((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
+    if (key === "image") {
+      let value = e.target.files[0];
+      setImage(value);
+      setinputData((prevState) => ({
+        ...prevState,
+        [key]: e.target.value,
+      }));
+    } else {
+      let { value } = e.target;
+      setinputData((prevState) => ({
+        ...prevState,
+        [key]: value,
+      }));
+    }
   };
 
   const addTodos = async (e) => {
@@ -47,14 +57,10 @@ function AddProduct() {
       formData.append("content", inputData.content);
       formData.append("price", inputData.price);
       formData.append("stock", inputData.stock);
-      formData.append("image", inputData.image);
-
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
+      formData.append("image", image);
 
       const { data } = await axios.post(
-        `http://localhost:8080/api/save?id=${inputData.id}`,
+        `http://localhost:8080/api/save`,
         formData,
         {
           headers: {
@@ -62,6 +68,7 @@ function AddProduct() {
           },
         }
       );
+      
       dispatch(todosAction.addTodos(inputData));
       setinputData({
         id: generateRandomString(10),
@@ -143,10 +150,10 @@ function AddProduct() {
           </label>
           <br></br>
           <input
-            required
+            // required
             type="file"
-            accept="image/*"
-            value={inputData.image}
+            name="file"
+            // value={inputData.image}
             onChange={(e) => handleInputChange(e, "image")}
           />
         </div>

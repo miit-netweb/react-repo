@@ -24,13 +24,14 @@ function Products() {
     } catch (error) {}
   };
   
+  console.log(todos)
 
   return (
     <div style={{display:"flex",alignItems:"center", margin:"5% 5%"}}>
       {todos.map((todo) => {
         return (
           <div  key={todo.id} className="card" style={{ width: "18rem", margin:"2% 1%"}}>
-            <img src="..." className="card-img-top" alt="..." />
+            <img src={`http://localhost:8080/api/${todo.image}`} className="card-img-top" alt="..." />
             <div className="card-body">
               <h5 className="card-title">{todo.title}</h5>
               <p className="card-text">{todo.content}</p>
