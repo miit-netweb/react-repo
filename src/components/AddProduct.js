@@ -94,8 +94,8 @@ function AddProduct() {
       }}
       onSubmit={addTodos}
     >
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">
+      <div className="mb-3">
+        <label for="exampleFormControlInput1" className="form-label">
           Title
         </label>
         <br></br>
@@ -105,8 +105,8 @@ function AddProduct() {
           onChange={(e) => handleInputChange(e, "title")}
         />
       </div>
-      <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">
+      <div className="mb-3">
+        <label for="exampleFormControlTextarea1" className="form-label">
           Content
         </label>
         <textarea
@@ -118,8 +118,8 @@ function AddProduct() {
           onChange={(e) => handleInputChange(e, "content")}
         ></textarea>
         <br></br>
-        <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
             Price
           </label>
           <br></br>
@@ -131,8 +131,8 @@ function AddProduct() {
           />
         </div>
         <br></br>
-        <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
             Stock
           </label>
           <br></br>
@@ -144,8 +144,8 @@ function AddProduct() {
           />
         </div>
         <br></br>
-        <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">
             Image
           </label>
           <br></br>
@@ -158,32 +158,32 @@ function AddProduct() {
           />
         </div>
         <br></br>
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" className="btn btn-primary">
           Save changes
         </button>
       </div>
 
       {/* <div
-        class="modal fade"
+        className="modal fade"
         id="exampleModal"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Add Todo
               </h1>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
                   Title
@@ -211,16 +211,16 @@ function AddProduct() {
                 ></textarea>
               </div>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 ref={buttonRef}
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
               </button>
-              <button type="button" class="btn btn-primary" onClick={addTodos}>
+              <button type="button" className="btn btn-primary" onClick={addTodos}>
                 Save changes
               </button>
             </div>

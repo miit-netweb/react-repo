@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Cart from "./Cart";
 
 function NavBar() {
-  const cart = useSelector((state) => state.carts.cart);
+  let cart = useSelector((state) => state.carts.cart);
+  
+  console.log("cart",cart);
+
+  const total = Object.values(cart).reduce((sum, value) => sum + value, 0)
+  console.log("total : ",total);
+  
+
   return (
     <nav
       className="navbar navbar-expand-lg bg-body-tertiary"
@@ -36,7 +43,7 @@ function NavBar() {
             <li className="nav-item">
               <Link
                 className="nav-link"
-                to={"/home"}
+                to={"/orders"}
                 style={{ color: "black" }}
               >
                 Order
@@ -46,10 +53,10 @@ function NavBar() {
             <li className="nav-item">
               <Link
                 className="nav-link"
-                to={"/home"}
+                to={"/cart"}
                 style={{ color: "black" }}
               >
-                <Cart item={Object.keys(cart).length} />
+                <Cart item={total} />
               </Link>
             </li>
           </ul>

@@ -50,7 +50,7 @@ function UpdateTodo({ id, title, content }) {
     <div>
       <button
         type="button"
-        class="btn btn-primary"
+        className="btn btn-primary"
         data-bs-toggle="modal"
         data-bs-target={`#_${String(id)}`}
       >
@@ -58,26 +58,26 @@ function UpdateTodo({ id, title, content }) {
       </button>
 
       <div
-        class="modal fade"
+        className="modal fade"
         id={`_${String(id)}`}
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Update Todo
               </h1>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
                   Title
@@ -103,16 +103,16 @@ function UpdateTodo({ id, title, content }) {
                 ></textarea>
               </div>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 ref={buttonRef}
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
               </button>
-              <button type="button" class="btn btn-primary" onClick={addTodos}>
+              <button type="button" className="btn btn-primary" onClick={addTodos}>
                 Save changes
               </button>
             </div>

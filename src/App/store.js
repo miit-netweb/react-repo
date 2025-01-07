@@ -3,7 +3,7 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    cart: {},
+    cart : JSON.parse(localStorage.getItem("cart")) || {}
   },
   reducers: {
     addItem: (state, action) => {
@@ -14,12 +14,33 @@ const cartSlice = createSlice({
       }
     },
     removeItem: (state,action) => {
+        
         if (state.cart[action.payload]>1) {
             state.cart[action.payload]--;
           } else {
             delete state.cart[action.payload]
           }
-    }
+    },
+    clearCart: (state) => {
+      state.cart = {}; 
+    },
+  },
+});
+
+
+const orderSlice = createSlice({
+  name: "orders",
+  initialState : {
+    orders: []
+  },
+  reducers: {
+    addOrder: (state, action) => {
+      const newOrder = action.payload; // Contains the address and possibly other data
+      state.orders.push(newOrder);
+    },
+    initializeTodos: (state, action) => {
+      state.orders = action.payload;
+    },
   },
 });
 
@@ -54,9 +75,17 @@ const todoSlice = createSlice({
 });
 
 const store = configureStore({
-  reducer: { todos: todoSlice.reducer, carts: cartSlice.reducer },
+  reducer: { todos: todoSlice.reducer, carts: cartSlice.reducer, orders : orderSlice.reducer },
 });
+
+store.subscribe(() => {
+    const state = store.getState();
+    localStorage.setItem("cart", JSON.stringify(state.carts.cart));
+  });
 
 export const todosAction = todoSlice.actions;
 export const cartAction = cartSlice.actions;
+export const orderAction = orderSlice.actions;
+
+
 export default store;

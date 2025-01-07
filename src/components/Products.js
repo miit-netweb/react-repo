@@ -18,16 +18,16 @@ function Products() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   const removeTodos = async (id) => {
     try {
       await api.delete(`/api/delete/${id}`);
       dispatch(todosAction.removeTodos(id));
     } catch (error) {}
-  };
-
- 
-  
-  
+  }; 
 
   return (
     <div style={{display:"flex",alignItems:"center", margin:"5% 5%"}}>
@@ -39,7 +39,7 @@ function Products() {
               <h5 className="card-title">{todo.title}</h5>
               <p className="card-text">{todo.content}</p>
               <button onClick={() => dispatch(cartAction.addItem(todo.id))} className="btn btn-primary">Add</button>
-              <button onClick={() => dispatch(cartAction.removeItem(todo.id))} className="btn btn-primary" style={{background:"red",margin:"0% 2%"}}>Remove</button>
+              {/* <button onClick={() => dispatch(cartAction.removeItem(todo.id))} className="btn btn-primary" style={{background:"red",margin:"0% 2%"}}>Remove</button> */}
               {/* <button
                 type="button"
                 className="btn btn-danger"
