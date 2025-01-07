@@ -1,22 +1,39 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { cartAction } from "../App/store";
 import { orderAction } from "../App/store";
+import axios from "axios";
 
 const Checkout = () => {
+
+  const cart = useSelector(state => state.carts.cart)
+  const allProducts = useSelector((state) => state.todos.todo);
+
+  const cartProducts = allProducts.filter((product) => cart[product.id]); 
+
+
+  const products = cartProducts.map((product) => ({ id: product.id, quantity:cart[product.id], price: product.price }));
+
+  console.log("products array : ",products);
+  
+
+  // console.log("inside checkout : cartProducts  => ", cartProducts);
+  
+
+
   const [step, setStep] = useState(1); 
   const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({
     name: "",
-    contact: "",
+    number: "",
     paymentMethod: "Credit Card",
   });
 //   const [address, setAddress] = useState("");
- const [city, setCity] = useState("");
+  const [lane,setLane] = useState("");
+  const [city,setCity] = useState("")
   const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [PinCode, setPinCode] = useState("");
+  const [pincode, setPincode] = useState("");
   const navigate = useNavigate();
 
   const handleUserDetailsChange = (e) => {
@@ -24,10 +41,21 @@ const Checkout = () => {
     setUserDetails({ ...userDetails, [name]: value });
   };
 
+  function generateRandomString(length) {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let randomString = "";
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomString += characters.charAt(randomIndex);
+    }
+    return randomString;
+  }
+
 
   const handleSubmitUserDetails = (e) => {
     e.preventDefault();
-    if (!userDetails.name || !userDetails.contact) {
+    if (!userDetails.name || !userDetails.number) {
       alert("Please fill out all user details.");
       return;
     }
@@ -36,24 +64,34 @@ const Checkout = () => {
     setStep(2); 
   };
 
-  const handleSubmitAddress = (e) => {
+  const handleSubmitAddress = async (e) => {
     e.preventDefault();
 
-    if (!city || !state || !country || !PinCode) {
+
+
+    if (!city || !state || !lane || !pincode) {
       alert("Please fill in all address fields.");
       return;
     }
 
-    const address = { city, state, country, PinCode };
+    const address = { lane, city, state, pincode };
 
     console.log("address: ",address);
+
+    const allData = {id:generateRandomString(10),products,...userDetails,...address}
+
+    console.log("allData to sent to backend : ",allData);
     
-
-    dispatch(orderAction.addOrder({ address }));
-
-    dispatch(cartAction.clearCart())
+    const { data } = await axios.post(
+      `http://localhost:8080/api/create/order`,
+      allData      
+    );
+    
+    dispatch(orderAction.addOrder({ data }));
 
     alert("Order confirmed!");
+
+    dispatch(cartAction.clearCart())
 
     navigate("/orders");
   };
@@ -81,9 +119,9 @@ const Checkout = () => {
             <label>
               Contact:
               <input
-                type="text"
-                name="contact"
-                value={userDetails.contact}
+                type="number"
+                name="number"
+                value={userDetails.number}
                 onChange={handleUserDetailsChange}
                 style={{ width: "100%", padding: "10px", margin: "5px 0" }}
                 required
@@ -130,6 +168,16 @@ const Checkout = () => {
         <form onSubmit={handleSubmitAddress} style={{ padding: "20px", maxWidth: "400px", margin: "0 auto" }}>
       <h2>Address Details</h2>
       <div>
+        <label>Lane:</label>
+        <input
+          type="text"
+          value={lane}
+          onChange={(e) => setLane(e.target.value)}
+          required
+          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
+        />
+      </div>
+      <div>
         <label>City:</label>
         <input
           type="text"
@@ -150,21 +198,11 @@ const Checkout = () => {
         />
       </div>
       <div>
-        <label>Country:</label>
+        <label>PIN Code:</label>
         <input
           type="text"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-          required
-          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
-        />
-      </div>
-      <div>
-        <label>ZIP Code:</label>
-        <input
-          type="text"
-          value={PinCode}
-          onChange={(e) => setPinCode(e.target.value)}
+          value={pincode}
+          onChange={(e) => setPincode(e.target.value)}
           required
           style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
         />

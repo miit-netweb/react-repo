@@ -13,17 +13,8 @@ const CartPage = () => {
 
     const cart = useSelector(state => state.carts.cart)
     
-    useEffect(() => {
-        const fetchData = async () => {
-          const { data } = await api.get(`/api/getall`);
-          console.log("data : ",data);
-          
-          dispatch(todosAction.initializeTodos(data));
-        };
-        fetchData();
-      }, []);
 
-      const products = useSelector((state) => state.todos.todo);
+    const products = useSelector((state) => state.todos.todo);
 
 
     console.log(`cart : ${cart}`);
