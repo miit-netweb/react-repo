@@ -12,6 +12,11 @@ const cartSlice = createSlice({
       } else {
         state.cart[action.payload]=1;
       }
+      // const productId = action.payload;
+      // state.cart = {
+      //   ...state.cart,
+      //   [productId]: (state.cart[productId] || 0) + 1,
+  // };
     },
     removeItem: (state,action) => {
         
@@ -20,11 +25,22 @@ const cartSlice = createSlice({
           } else {
             delete state.cart[action.payload]
           }
-    },
-    clearCart: (state) => {
-      state.cart = {}; 
-    },
-  },
+        // const productId = action.payload;
+        // if (state.cart[productId] > 1) {
+        //   state.cart = {
+        //     ...state.cart,
+        //     [productId]: state.cart[productId] - 1,
+        //   };
+        // } else {
+        //   const { [productId]: _, ...rest } = state.cart; // Exclude the product
+        //   state.cart = rest; // Update state without mutating
+        // }
+        //   },
+      },
+      clearCart: (state) => {
+        state.cart = {}; 
+      }
+  }
 });
 
 
