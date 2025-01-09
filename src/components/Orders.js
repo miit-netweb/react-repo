@@ -55,7 +55,6 @@ function Orders() {
 
   return (
     <>
-      <h1> order done</h1>
       <table class="table table-striped table-dark">
         <thead>
           <tr>

@@ -5,36 +5,54 @@ import { todosAction, cartAction } from "../App/store";
 
 const PaginationComponent = () => {
 
-  const totalItems = 5;
-  const itemsPerPage = 1;
+  const itemsPerPage = 3;
   const dispatch = useDispatch();
 
-  // State to keep track of the current page
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Calculate the total number of pages
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const [totalPages, setTotalPage] = useState(2);
 
-  // Calculate the index of the first and last item on the current page
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const styles = {
+    button: {
+      margin: "0 5px",
+      padding: "10px 15px",
+      fontSize: "16px",
+      backgroundColor: "#f0f0f0",
+      border: "1px solid #ddd",
+      borderRadius: "8px",
+      cursor: "pointer",
+      transition: "all 0.3s ease",
+    },
+    activeButton: {
+      backgroundColor: "#007bff",
+      color: "white",
+      fontWeight: "bold",
+      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    },
+    infoText: {
+      marginTop: "10px",
+      fontSize: "16px",
+      color: "#555",
+    },
+  };
 
-  // Generate current items (this could be fetched from an API)
-  const currentItems = Array.from(
-    { length: totalItems },
-    (_, i) => `Item ${i + 1}`
-  ).slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await api.get(
+        `/api/page/product?page=0&size=${itemsPerPage}`
+      );
+      console.log("response from api : ", data);
+      console.log("data for this particular page : ", data.content);
+      console.log("total data items : ", data.totalElements);
 
-   useEffect(() => {
-      const fetchData = async () => {
-        const { data } = await api.get(`/api/page/product?page=0&size=1`);
-        console.log(data.content)
-        dispatch(todosAction.initializeTodos(data.content));
-      };
-      fetchData();
-    }, []);
+      setTotalPage(Math.ceil(data.totalElements / itemsPerPage));
+      console.log("total page : ", totalPages);
 
-  // Change page handler
+      dispatch(todosAction.initializeTodos(data.content));
+    };
+    fetchData();
+  }, []);
+
   const handlePageChange = (pageNumber) => {
     if (pageNumber > 0 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
@@ -45,53 +63,54 @@ const PaginationComponent = () => {
     let pageBE = currentPage;
     if (key === -1) {
       handlePageChange(currentPage - 1);
-      pageBE-=1;
+      pageBE -= 1;
     } else if (key === -2) {
       handlePageChange(currentPage + 1);
-      pageBE+=1
+      pageBE += 1;
     } else {
-      handlePageChange(key+1);
-      pageBE=key+1;
+      handlePageChange(key + 1);
+      pageBE = key + 1;
     }
     const { data } = await api.get(
-      `/api/page/product?page=${pageBE - 1}&size=1`
+      `/api/page/product?page=${pageBE - 1}&size=${itemsPerPage}`
     );
     dispatch(todosAction.initializeTodos(data.content));
-
   };
 
-  console.log(currentPage)
+  console.log(currentPage);
 
-  // JSX for the Pagination component
   return (
-    <div >
-      {/* Pagination Controls */}
-      <div>
-        <button onClick={() => getPageProduct(-1)} disabled={currentPage === 1}>
-          Prev
-        </button>
+    <div style={{ textAlign: "center", margin: "20px 0" }}>
+      <button
+        onClick={() => getPageProduct(-1)}
+        disabled={currentPage === 1}
+        style={styles.button}
+      >
+        Prev
+      </button>
 
-        {/* Display page numbers */}
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => getPageProduct(i)}
-            style={{ fontWeight: currentPage === i + 1 ? "bold" : "normal" }}
-          >
-            {i + 1}
-          </button>
-        ))}
-
+      {Array.from({ length: totalPages }, (_, i) => (
         <button
-          onClick={() => getPageProduct(-2)}
-          disabled={currentPage === totalPages}
+          key={i + 1}
+          onClick={() => getPageProduct(i)}
+          style={{
+            ...styles.button,
+            ...(currentPage === i + 1 ? styles.activeButton : {}),
+          }}
         >
-          Next
+          {i + 1}
         </button>
-      </div>
+      ))}
 
-      {/* Total Pages Info */}
-      <p>
+      <button
+        onClick={() => getPageProduct(-2)}
+        disabled={currentPage === totalPages}
+        style={styles.button}
+      >
+        Next
+      </button>
+
+      <p style={styles.infoText}>
         Page {currentPage} of {totalPages}
       </p>
     </div>

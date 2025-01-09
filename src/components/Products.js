@@ -64,7 +64,7 @@ function Products() {
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "space-around",
-        gap: "20px",
+        gap: "10px",
         margin: "5% 5%",
       }}
     >
@@ -106,7 +106,7 @@ function Products() {
               ₹{todo.price}
             </p>
             <button
-              onClick={() => dispatch(cartAction.addItem(todo.id))}
+              onClick={() => dispatch(cartAction.addItem(todo))}
               className="btn btn-primary"
               style={{
                 backgroundColor: "#007bff",

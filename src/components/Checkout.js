@@ -8,19 +8,16 @@ import axios from "axios";
 const Checkout = () => {
 
   const cart = useSelector(state => state.carts.cart)
-  const allProducts = useSelector((state) => state.todos.todo);
 
-  const cartProducts = allProducts.filter((product) => cart[product.id]); 
-
-
-  const products = cartProducts.map((product) => ({ id: product.id, quantity:cart[product.id], price: product.price }));
+  const products = cart.map((product) => ({ 
+    id: product.id, 
+    quantity:product.quantity, 
+    price: product.price,
+    title: product.title
+   }));
 
   console.log("products array : ",products);
   
-
-  // console.log("inside checkout : cartProducts  => ", cartProducts);
-  
-
 
   const [step, setStep] = useState(1); 
   const dispatch = useDispatch();
@@ -29,7 +26,6 @@ const Checkout = () => {
     number: "",
     paymentMethod: "Credit Card",
   });
-//   const [address, setAddress] = useState("");
   const [lane,setLane] = useState("");
   const [city,setCity] = useState("")
   const [state, setState] = useState("");

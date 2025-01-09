@@ -5,12 +5,13 @@ import Cart from "./Cart";
 
 function NavBar() {
   let cart = useSelector((state) => state.carts.cart);
-  
-  console.log("cart",cart);
 
-  const total = Object.values(cart).reduce((sum, value) => sum + value, 0)
-  console.log("total : ",total);
-  
+  console.log("cart", cart);
+
+  let total = cart.reduce(
+    (totalQuantity, product) => totalQuantity + product.quantity,
+    0
+  );
 
   return (
     <nav

@@ -25,15 +25,18 @@ const CartPage = () => {
     
     console.log(`cart products : `,cartProducts);
 
-    // Calculate total quantity and price
-    const totalQuantity = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
-    const totalPrice = cartProducts.reduce(
-        (sum, product) => sum + product.price * cart[product.id],
+    const totalPrice = cart.reduce(
+        (sum, product) => sum + product.price * product.quantity,
         0
     );
+
+    let total = cart.reduce(
+        (totalQuantity, product) => totalQuantity + product.quantity,
+        0
+      );
     
     function checkout(){
-        if(cartProducts.length === 0){
+        if(cart.length === 0){
             alert("cart is empty")
         }
         else{
@@ -45,7 +48,7 @@ const CartPage = () => {
     
         <div style={{ display: "flex", justifyContent: "space-between", margin: "5% 5%" }}>
         <div style={{ flex: "2", marginRight: "2%" }}>
-        {cartProducts.map((product) => (
+        {cart.map((product) => (
             <div
             key={product.id}
             className="card"
@@ -61,14 +64,14 @@ const CartPage = () => {
                 <p>{product.content}</p>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <button
-                    onClick={() => dispatch(cartAction.addItem(product.id))}
+                    onClick={() => dispatch(cartAction.addItem(product))}
                     className="btn btn-primary"
                     style={{ padding: "5px 10px" }}
                 >
                     +
                 </button>
                 <p style={{ margin: "0" }}>
-                    <strong>Quantity:</strong> {cart[product.id]}
+                    <strong>Quantity:</strong> {product.quantity}
                 </p>
                 <button
                     onClick={() => dispatch(cartAction.removeItem(product.id))}
@@ -94,7 +97,7 @@ const CartPage = () => {
         }}
         >
         <h4>Summary</h4>
-        <p><strong>Total Products:</strong> {totalQuantity}</p>
+        <p><strong>Total Products:</strong> {total}</p>
         <p><strong>Total Price:</strong> ₹{totalPrice.toFixed(2)}</p>
             <button
         style={{

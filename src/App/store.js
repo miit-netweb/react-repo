@@ -3,51 +3,52 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    cart : JSON.parse(localStorage.getItem("cart")) || {}
+    cart: Array.isArray(JSON.parse(localStorage.getItem("cart")))
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [],
   },
   reducers: {
     addItem: (state, action) => {
-      if (state.cart[action.payload]) {
-        state.cart[action.payload]++;
-      } else {
-        state.cart[action.payload]=1;
-      }
-      // const productId = action.payload;
-      // state.cart = {
-      //   ...state.cart,
-      //   [productId]: (state.cart[productId] || 0) + 1,
-  // };
-    },
-    removeItem: (state,action) => {
-        
-        if (state.cart[action.payload]>1) {
-            state.cart[action.payload]--;
-          } else {
-            delete state.cart[action.payload]
-          }
-        // const productId = action.payload;
-        // if (state.cart[productId] > 1) {
-        //   state.cart = {
-        //     ...state.cart,
-        //     [productId]: state.cart[productId] - 1,
-        //   };
-        // } else {
-        //   const { [productId]: _, ...rest } = state.cart; // Exclude the product
-        //   state.cart = rest; // Update state without mutating
-        // }
-        //   },
-      },
-      clearCart: (state) => {
-        state.cart = {}; 
-      }
-  }
-});
+      console.log("action payload of cart : ");
 
+      const product = action.payload;
+
+      if (!Array.isArray(state.cart)) {
+        state.cart = []; // Reset to empty array if cart is not an array
+      }
+
+      const existingProduct = state.cart.find((item) => item.id === product.id);
+
+      if (existingProduct) {
+        existingProduct.quantity += 1;
+      } else {
+        state.cart.push({ ...product, quantity: 1 });
+      }
+    },
+    removeItem: (state, action) => {
+      const productId = action.payload; // The ID of the product to remove
+      const existingProduct = state.cart.find((item) => item.id === productId);
+
+      if (existingProduct) {
+        if (existingProduct.quantity > 1) {
+          // Decrease the quantity by 1
+          existingProduct.quantity -= 1;
+        } else {
+          // Remove the product from the cart if quantity reaches 0
+          state.cart = state.cart.filter((item) => item.id !== productId);
+        }
+      }
+    },
+    clearCart: (state) => {
+      state.cart = [];
+    },
+  },
+});
 
 const orderSlice = createSlice({
   name: "orders",
-  initialState : {
-    orders: []
+  initialState: {
+    orders: [],
   },
   reducers: {
     addOrder: (state, action) => {
@@ -91,17 +92,20 @@ const todoSlice = createSlice({
 });
 
 const store = configureStore({
-  reducer: { todos: todoSlice.reducer, carts: cartSlice.reducer, orders : orderSlice.reducer },
+  reducer: {
+    todos: todoSlice.reducer,
+    carts: cartSlice.reducer,
+    orders: orderSlice.reducer,
+  },
 });
 
 store.subscribe(() => {
-    const state = store.getState();
-    localStorage.setItem("cart", JSON.stringify(state.carts.cart));
-  });
+  const state = store.getState();
+  localStorage.setItem("cart", JSON.stringify(state.carts.cart));
+});
 
 export const todosAction = todoSlice.actions;
 export const cartAction = cartSlice.actions;
 export const orderAction = orderSlice.actions;
-
 
 export default store;
